@@ -117,6 +117,9 @@ import {
   setUploadFlipped,
 } from './memo.js';
 
+// A text field from the request body, or '' when it is anything else (a number,
+// an object, an array): hostile or broken input gets a clear 400, never a crash.
+const str = (v) => (typeof v === 'string' ? v : '');
 const router = Router();
 router.use(demoGuard);
 
@@ -146,7 +149,7 @@ router.get('/demo', (req, res) => {
 // login case-insensitive in practice, so a phone keyboard auto-capitalizing
 // the first letter doesn't lock someone out.
 router.post('/auth/login', loginRateLimit, (req, res) => {
-  const token = (req.body?.token || '').trim().toLowerCase();
+  const token = str(req.body?.token).trim().toLowerCase();
   if (!token) return res.status(400).json({ error: 'err_token_missing' });
   const user = findUserByToken(token);
   if (!user) return res.status(401).json({ error: 'err_token_invalid' });
@@ -219,10 +222,10 @@ router.post('/me/lang', (req, res) => {
 // token itself (e.g. a device left logged in shouldn't let a stranger
 // silently take over the account). New key must be letters/numbers only.
 router.post('/me/change-token', (req, res) => {
-  const currentToken = String(req.body?.currentToken || '').toLowerCase();
+  const currentToken = str(req.body?.currentToken).toLowerCase();
   // Keys are always lowercase (see /auth/login) - forcing it here too means
   // the stored key stays canonical regardless of how it was typed/pasted.
-  const newToken = String(req.body?.newToken || '').trim().toLowerCase();
+  const newToken = str(req.body?.newToken).trim().toLowerCase();
 
   // "That key is taken" says the key belongs to someone, so a logged-in guest
   // could use this form to test other people's keys. Every wrong current key
@@ -375,7 +378,7 @@ router.post('/plaza-posts/:id/vote', (req, res) => {
 
 // Suggest one consequence per day.
 router.post('/consequences', (req, res) => {
-  const text = (req.body?.text || '').trim();
+  const text = str(req.body?.text).trim();
   if (!text) return res.status(400).json({ error: 'err_consequence_text_required' });
   if (text.length > 200) return res.status(400).json({ error: 'err_max_200_chars' });
 
@@ -653,7 +656,7 @@ router.post('/push/subscribe', (req, res) => {
 });
 
 router.post('/push/unsubscribe', (req, res) => {
-  const endpoint = req.body?.endpoint;
+  const endpoint = str(req.body?.endpoint);
   if (endpoint) removeSubscription(endpoint);
   res.json({ ok: true });
 });
@@ -796,7 +799,7 @@ router.get('/admin/users', (req, res) => {
 router.use('/admin/users', requireOwner);
 
 router.post('/admin/users', (req, res) => {
-  const name = (req.body?.name || '').trim();
+  const name = str(req.body?.name).trim();
   if (!name) return res.status(400).json({ error: 'err_name_missing' });
   const token = generateUserToken(name);
   const info = db.prepare(
@@ -810,7 +813,7 @@ router.post('/admin/users', (req, res) => {
 // (which would also generate them a new access key).
 router.patch('/admin/users/:id/name', (req, res) => {
   const id = Number(req.params.id);
-  const name = (req.body?.name || '').trim();
+  const name = str(req.body?.name).trim();
   if (!name) return res.status(400).json({ error: 'err_name_missing' });
   const user = db.prepare('SELECT id FROM users WHERE id = ?').get(id);
   if (!user) return res.status(404).json({ error: 'err_user_not_found' });
@@ -1220,7 +1223,7 @@ router.get('/admin/outfit/:night/photos.zip', (req, res) => {
 // self-registration already gets, so an admin adding someone else's entry
 // doesn't leave it unattributed forever (see contestantsForNight()).
 router.post('/admin/contestants', (req, res) => {
-  const name = (req.body?.name || '').trim();
+  const name = str(req.body?.name).trim();
   const night = isNight(req.body?.night) ? req.body.night : DEFAULT_NIGHT;
   if (!name) return res.status(400).json({ error: 'err_name_missing' });
   let userId = null;
@@ -1268,7 +1271,7 @@ router.post('/admin/contestants/register', (req, res) => {
 // Renames a contestant (e.g. fixing a typo in a self-registered entry, or
 // just reviewing/cleaning up submissions before opening voting).
 router.patch('/admin/contestants/:id', (req, res) => {
-  const name = (req.body?.name || '').trim();
+  const name = str(req.body?.name).trim();
   if (!name) return res.status(400).json({ error: 'err_name_missing' });
   if (name.length > 60) return res.status(400).json({ error: 'err_max_60_chars' });
   const info = db.prepare('UPDATE contestants SET name = ? WHERE id = ?').run(name, Number(req.params.id));
