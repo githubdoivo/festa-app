@@ -267,6 +267,32 @@ for (const deviceName of IOS_DEVICES) {
     await context.close();
   });
 
+  // iPhone Safari (iOS 26) paints a solid band over anything pinned to the
+  // top or bottom edge, so the login keeps its painting still without
+  // position: fixed - the window never scrolls, .cover scrolls over it.
+  test(`login painting stays still with nothing pinned, the form scrolling over it, on ${deviceName}`, async () => {
+    const context = await iphoneContext(deviceName);
+    const page = await context.newPage();
+    await page.goto(base + '/');
+    await page.waitForSelector('#login:not(.hidden)', { timeout: WAIT_TIMEOUT });
+    const state = await page.evaluate(() => {
+      const login = document.getElementById('login');
+      const cover = login.querySelector('.cover');
+      const r = login.getBoundingClientRect();
+      return {
+        pinned: [...document.querySelectorAll('body *')].filter((el) => el.getClientRects().length && ['fixed', 'sticky'].includes(getComputedStyle(el).position)).map((el) => el.id || el.className),
+        windowScroll: getComputedStyle(document.documentElement).overflowY,
+        coverScroll: getComputedStyle(cover).overflowY,
+        top: r.top, bottom: r.bottom, h: innerHeight,
+      };
+    });
+    assert.deepEqual(state.pinned, [], `pinned elements on the login: ${state.pinned}`);
+    assert.equal(state.windowScroll, 'hidden');
+    assert.equal(state.coverScroll, 'auto');
+    assert.ok(state.top <= 0 && state.bottom >= state.h, `the painting must cover the screen: ${JSON.stringify(state)}`);
+    await context.close();
+  });
+
   test(`main app (plaza + rata + best look + chat + memo tabs) has no horizontal overflow on ${deviceName}`, async () => {
     const context = await iphoneContext(deviceName);
     const page = await loginPage(context, ADMIN, '/');

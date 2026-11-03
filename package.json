@@ -1,6 +1,6 @@
 {
   "name": "festa-app",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "Party web app with four features: wall, rata, snatch and plaza.",
   "type": "module",
   "main": "src/server.js",
