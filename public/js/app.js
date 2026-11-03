@@ -118,8 +118,18 @@ function registerPushWorker() {
 function showLogin() {
   $('login').classList.remove('hidden');
   $('app').classList.add('hidden');
-  window.scrollTo(0, 0);
+  holdLoginStrip();
 }
+
+// While the login shows, the window stays scrolled down by the painted strip
+// above it (--above in styles.css), so iPhone Safari shows the painting behind
+// the clock instead of a flat band. Only .cover scrolls for the guest.
+const LOGIN_ABOVE = 160;
+function holdLoginStrip() {
+  if ($('login').classList.contains('hidden')) return;
+  if (Math.abs(window.scrollY - LOGIN_ABOVE) > 0.5) window.scrollTo(0, LOGIN_ABOVE);
+}
+['scroll', 'resize', 'pageshow', 'load'].forEach((e) => window.addEventListener(e, holdLoginStrip, { passive: true }));
 
 
 function showApp(me) {

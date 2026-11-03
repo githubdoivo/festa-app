@@ -290,6 +290,11 @@ for (const deviceName of IOS_DEVICES) {
     assert.equal(state.windowScroll, 'hidden');
     assert.equal(state.coverScroll, 'auto');
     assert.ok(state.top <= 0 && state.bottom >= state.h, `the painting must cover the screen: ${JSON.stringify(state)}`);
+    // Held scrolled down by the painted strip above, so the clock sits on the painting
+    const held = async () => { for (let i = 0; i < 20; i++) { if (await page.evaluate(() => window.scrollY) === 160) return true; await page.waitForTimeout(50); } return false; };
+    assert.ok(await held(), 'the window should sit 160px down while the login shows');
+    await page.evaluate(() => window.scrollTo(0, 0));
+    assert.ok(await held(), 'scrolling the window up should snap back to the strip');
     await context.close();
   });
 
