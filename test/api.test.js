@@ -147,6 +147,18 @@ test('GET /version is public and reports env: null when APP_ENV is unset (prod d
   assert.equal(r.data.env, null);
 });
 
+test('every response carries the security headers: own scripts only, no framing, no sniffing', async () => {
+  for (const path of ['/', '/api/version']) {
+    const r = await fetch(base.replace(/\/api$/, '') + path);
+    const csp = r.headers.get('content-security-policy') || '';
+    assert.match(csp, /script-src 'self'(;|$)/, path);
+    assert.match(csp, /frame-ancestors 'none'/, path);
+    assert.equal(r.headers.get('x-content-type-options'), 'nosniff', path);
+    assert.equal(r.headers.get('x-frame-options'), 'DENY', path);
+    assert.equal(r.headers.get('x-powered-by'), null, path);
+  }
+});
+
 /* ------------------------------- security.txt ------------------------------ */
 // RFC 9116's canonical /.well-known/security.txt is a static file (see
 // public/.well-known/security.txt), served automatically by express.static

@@ -42,6 +42,30 @@ if (CANONICAL_HOST && REDIRECT_HOSTS.size) {
     res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
   });
 }
+// Security headers on every response (no extra dependency). The app loads
+// nothing from other sites, so the browser is told to run only this site's own
+// scripts: a guest's message that somehow carried <script> could not run, and
+// no other site can show the app inside a frame (clickjacking).
+const CSP = [
+  "default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:", "media-src 'self' blob:", "font-src 'self'", "connect-src 'self'",
+  "worker-src 'self'", "manifest-src 'self'", "object-src 'none'", "base-uri 'self'",
+  "form-action 'self'", "frame-ancestors 'none'",
+].join('; ');
+app.use((req, res, next) => {
+  res.set({
+    'Content-Security-Policy': CSP,
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), payment=(), usb=()',
+    'Cross-Origin-Opener-Policy': 'same-origin',
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  });
+  next();
+});
+app.disable('x-powered-by');
+
 // Default 100kb is too small for a base64-encoded outfit photo (client
 // resizes to ~800px JPEG first, but base64 still adds ~33% overhead) - 2mb
 // leaves generous headroom while still bounding the request body.
