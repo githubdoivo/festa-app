@@ -585,6 +585,38 @@ body:has(#login:not(.hidden)) { background-color: #241d17; }
   text-align: center;
   gap: 20px;
 }
+/* A still painting with the login scrolling over it (like ivolopes.com).
+   Nothing is position: fixed - iPhone Safari (iOS 26) paints a solid band of
+   one sampled colour over anything pinned to the top or bottom edge. Instead
+   the window never scrolls while the login shows: #login holds the painting
+   still and .cover is the part that scrolls. On phones both reach a little
+   below the "large" screen height, where Safari's floating bottom bar sits,
+   so the painting runs under it too. */
+:root { --below: 0px; }
+@media (pointer: coarse) { :root { --below: 120px; } }
+html:has(#login:not(.hidden)),
+body:has(#login:not(.hidden)) { height: 100%; overflow: hidden; }
+#login:not(.hidden) {
+  position: absolute; top: 0; left: 0; right: 0;
+  width: auto; margin: 0; min-height: 0;
+  height: calc(100vh + var(--below));
+  height: calc(100lvh + var(--below));
+}
+#login:not(.hidden) .cover {
+  height: 100%; min-height: 0;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: none;
+  /* Full width, so a finger anywhere on the screen scrolls it; the column
+     itself stays as narrow as before */
+  max-width: none;
+  padding-left: max(20px, calc((100% - 580px) / 2));
+  padding-right: max(20px, calc((100% - 580px) / 2));
+  padding-bottom: calc(36px + env(safe-area-inset-bottom) + var(--below));
+  /* Bottom-anchored with an auto margin instead of flex-end: flex-end lets
+     content that overflows the top become unreachable by scrolling */
+  justify-content: flex-start;
+}
+#login:not(.hidden) .cover > .greeting { margin-top: auto; }
+
 /* Two beats instead of one run-on sentence - "bem-vinde" is the warm,
    personal welcome (the illustration's own hand-lettering is the real
    headline of this screen, so this stays modest rather than competing for
