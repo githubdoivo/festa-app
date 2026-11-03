@@ -428,8 +428,11 @@ function tokenBase(name) {
 }
 
 /**
- * Generates a memorable per-user token: their name plus a random 4-digit
- * suffix (e.g. "rito8749"), easier to type/remember than an opaque string.
+ * Generates a memorable per-user token: their name plus a random 6-digit
+ * suffix (e.g. "rito874912"), easier to type/remember than an opaque string.
+ * Six digits, not four: a name is easy to know, so the digits are all that
+ * stand between a stranger and the account (a million tries, not 10,000).
+ * Anyone can change theirs to something easier in Settings.
  * Retries on the rare collision (checked via the token's lookup hash).
  */
 // Memo: 5x/day, at the same random moments for every guest (like BeReal), a
@@ -598,7 +601,7 @@ export function generateUserToken(name) {
 
   let token;
   do {
-    const digits = String(randomInt(0, 10000)).padStart(4, '0');
+    const digits = String(randomInt(0, 1000000)).padStart(6, '0');
     token = `${base}${digits}`;
   } while (db.prepare('SELECT 1 FROM users WHERE token_hash = ?').get(hashToken(token)));
 

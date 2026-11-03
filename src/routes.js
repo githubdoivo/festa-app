@@ -6,7 +6,7 @@ import { ZipFile } from 'yazl';
 import multer from 'multer';
 import db from './db.js';
 import { authenticate, findUserByToken, isDevLoginKey, requireAdmin, requireOwner } from './auth.js';
-import { loginRateLimit } from './rateLimit.js';
+import { loginRateLimit, checkAuthAttempt } from './rateLimit.js';
 import { generateUserToken, getSetting, setSetting } from './db.js';
 import { hashToken, encryptToken, decryptToken } from './tokens.js';
 import { today, nightStatus } from './time.js';
@@ -224,9 +224,18 @@ router.post('/me/change-token', (req, res) => {
   // the stored key stays canonical regardless of how it was typed/pasted.
   const newToken = String(req.body?.newToken || '').trim().toLowerCase();
 
+  // "That key is taken" says the key belongs to someone, so a logged-in guest
+  // could use this form to test other people's keys. Every wrong current key
+  // and every taken key counts against the same per-address budget as a
+  // failed login (10 per 15 minutes), so it is no faster than guessing there.
+  const failed = (status, error) => {
+    const limit = checkAuthAttempt(req.ip);
+    if (limit.blocked) { res.set('Retry-After', String(limit.retryAfter)); return res.status(429).json({ error: 'err_rate_limited' }); }
+    return res.status(status).json({ error });
+  };
   const user = db.prepare('SELECT token_hash FROM users WHERE id = ?').get(req.user.id);
   if (hashToken(currentToken) !== user.token_hash) {
-    return res.status(401).json({ error: 'err_current_key_wrong' });
+    return failed(401, 'err_current_key_wrong');
   }
   if (!/^[a-z0-9]+$/.test(newToken)) {
     return res.status(400).json({ error: 'err_key_invalid_chars' });
@@ -238,7 +247,7 @@ router.post('/me/change-token', (req, res) => {
   const newHash = hashToken(newToken);
   const collision = db.prepare('SELECT id FROM users WHERE token_hash = ? AND id != ?').get(newHash, req.user.id);
   if (collision) {
-    return res.status(409).json({ error: 'err_key_taken' });
+    return failed(409, 'err_key_taken');
   }
 
   try {
@@ -256,7 +265,7 @@ router.post('/me/change-token', (req, res) => {
     // key is taken". Two people picking the same key is a normal thing to
     // happen at a party, not a server fault.
     if (String(err?.code || '').includes('SQLITE_CONSTRAINT')) {
-      return res.status(409).json({ error: 'err_key_taken' });
+      return failed(409, 'err_key_taken');
     }
     throw err;
   }
