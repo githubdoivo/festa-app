@@ -616,6 +616,23 @@ body:has(#login:not(.hidden)) { height: 100%; overflow: hidden; }
   justify-content: flex-start;
 }
 #login:not(.hidden) .cover > .greeting { margin-top: auto; }
+/* Phones: the painting keeps the size it had before the screen reached under
+   the bottom bar (exactly the large screen height, from the top), so the
+   cottage stays above the form. The strip below it, behind Safari's bar, is
+   the painting's own bottom-edge green under the same dark overlay, so the
+   two meet without a seam. */
+@media (pointer: coarse) and (orientation: portrait) and (max-width: 600px) {
+  #login:not(.hidden) { background-color: #2f522c; }
+  #login:not(.hidden)::before {
+    background-size: 100% 100%, max(100%, calc(100lvh * 804 / 1538)) auto;
+    background-position: center, center top;
+  }
+  /* The greeting and form are placed on the painting, not on the bottom of the
+     screen: "boas-vindas" on the cottage's walls, the key field below it, on
+     every phone height. Anything lower simply scrolls. */
+  #login:not(.hidden) .cover { padding-top: calc(100lvh * .57); }
+  #login:not(.hidden) .cover > .greeting { margin-top: 0; }
+}
 
 /* Two beats instead of one run-on sentence - "bem-vinde" is the warm,
    personal welcome (the illustration's own hand-lettering is the real
