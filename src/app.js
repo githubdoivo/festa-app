@@ -162,6 +162,10 @@ app.get('/{*splat}', (req, res) => sendVersionedHtml(res, 'index.html'));
 // message client-side.
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  // A body the browser sent wrong (broken JSON, too large) is the request's fault,
+  // not the server's: say so with a 4xx, and keep the log for real failures only
+  if (err?.type === 'entity.parse.failed') return res.status(400).json({ error: 'err_bad_request' });
+  if (err?.type === 'entity.too.large') return res.status(413).json({ error: 'err_too_large' });
   console.error('[error]', err);
   res.status(500).json({ error: 'err_generic' });
 });
