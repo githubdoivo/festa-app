@@ -44,3 +44,8 @@ export function loginRateLimit(req, res, next) {
 export function checkAuthAttempt(ip) {
   return checkAndCount(ip);
 }
+
+/** Tests only: a clean budget, so earlier failures in the same file cannot tip a test into 429. */
+export function resetAuthAttempts() {
+  attempts.clear();
+}

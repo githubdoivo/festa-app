@@ -499,7 +499,7 @@ test("regenerating a user's key issues a new one and invalidates the old", async
   const regen = await api('POST', `/admin/users/${created.data.id}/regenerate-token`, { token: ADMIN });
   assert.equal(regen.status, 200);
   assert.notEqual(regen.data.token, oldToken);
-  assert.match(regen.data.token, /^regenerable\d{4}$/);
+  assert.match(regen.data.token, /^regenerable\d{6}$/);
 
   const oldLogin = await api('GET', '/me', { token: oldToken });
   assert.equal(oldLogin.status, 401);
@@ -2123,6 +2123,7 @@ test('a user can change their own access key, given the correct current one', as
 // one must be refused. It is - the existing test below covers the plain
 // case. These are the ways round it that nobody had checked.
 test('a key cannot be taken by changing its case, or by two people at once', async () => {
+  (await import('../src/rateLimit.js')).resetAuthAttempts();
   const ana = await api('POST', '/admin/users', { token: ADMIN, body: { name: 'Collision Ana' } });
   const bruno = await api('POST', '/admin/users', { token: ADMIN, body: { name: 'Collision Bruno' } });
 
@@ -2165,6 +2166,7 @@ test('a key cannot be taken by changing its case, or by two people at once', asy
 });
 
 test('changing to a key that already belongs to someone else is rejected', async () => {
+  (await import('../src/rateLimit.js')).resetAuthAttempts();
   const a = await api('POST', '/admin/users', { token: ADMIN, body: { name: 'KeyOwnerA' } });
   const b = await api('POST', '/admin/users', { token: ADMIN, body: { name: 'KeyOwnerB' } });
 
@@ -4240,4 +4242,16 @@ test('the guest-list card empties the list and puts the default guests back', as
   assert.equal(again.data.created, 0, 'a second press adds nobody');
 
   await api('POST', '/admin/users/wipe', { token: ADMIN });
+});
+
+test('the change-key form cannot be used to test other people\'s keys: taken keys count like failed logins', async () => {
+  (await import('../src/rateLimit.js')).resetAuthAttempts();
+  const probe = await api('POST', '/admin/users', { token: ADMIN, body: { name: "Prober" } });
+  const target = await api('POST', '/admin/users', { token: ADMIN, body: { name: "Target" } });
+  let last;
+  for (let i = 0; i < 12; i++) {
+    last = await api('POST', '/me/change-token', { token: probe.data.token, body: { currentToken: probe.data.token, newToken: target.data.token } });
+    if (last.status === 429) break;
+  }
+  assert.equal(last.status, 429, 'repeated "taken" answers must hit the rate limit');
 });
