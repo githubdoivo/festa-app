@@ -592,16 +592,29 @@ body:has(#login:not(.hidden)) { background-color: #241d17; }
    still and .cover is the part that scrolls. On phones both reach a little
    below the "large" screen height, where Safari's floating bottom bar sits,
    so the painting runs under it too. */
-:root { --below: 0px; }
+:root { --below: 0px; --above: 160px; }
 @media (pointer: coarse) { :root { --below: 120px; } }
+/* Behind the clock: Safari fills it with whatever lies just above the top of the
+   screen, so #login starts a strip (--above) higher and the window is held
+   scrolled down by that strip while the login shows (holdLoginStrip in app.js).
+   The strip shows the painting's top edge mirrored, so the sky just carries on. */
 html:has(#login:not(.hidden)),
 body:has(#login:not(.hidden)) { height: 100%; overflow: hidden; }
 #login:not(.hidden) {
   position: absolute; top: 0; left: 0; right: 0;
   width: auto; margin: 0; min-height: 0;
-  height: calc(100vh + var(--below));
-  height: calc(100lvh + var(--below));
+  height: calc(100vh + var(--above) + var(--below));
+  height: calc(100lvh + var(--above) + var(--below));
 }
+#login:not(.hidden)::before { inset: var(--above) 0 0; }
+#login:not(.hidden)::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: var(--above); z-index: 0;
+  background-color: inherit;
+}
+/* body must not be the login's frame: with overflow hidden it would clip the
+   strip and the window could not be held down by it */
+body:has(#login:not(.hidden)) { position: static; }
+body:has(#login:not(.hidden)) .version-badge { bottom: calc(-1 * var(--above)); }
 #login:not(.hidden) .cover {
   height: 100%; min-height: 0;
   overflow-x: hidden; overflow-y: auto; overscroll-behavior: none;
@@ -610,6 +623,7 @@ body:has(#login:not(.hidden)) { height: 100%; overflow: hidden; }
   max-width: none;
   padding-left: max(20px, calc((100% - 580px) / 2));
   padding-right: max(20px, calc((100% - 580px) / 2));
+  padding-top: calc(var(--above) + 22px);
   padding-bottom: calc(36px + env(safe-area-inset-bottom) + var(--below));
   /* Bottom-anchored with an auto margin instead of flex-end: flex-end lets
      content that overflows the top become unreachable by scrolling */
@@ -627,10 +641,16 @@ body:has(#login:not(.hidden)) { height: 100%; overflow: hidden; }
     background-size: 100% 100%, max(100%, calc(100lvh * 804 / 1538)) auto;
     background-position: center, center top;
   }
+  /* The strip above: the painting's top edge, mirrored, under the same light overlay */
+  #login:not(.hidden)::after {
+    transform: scaleY(-1);
+    background: linear-gradient(rgba(10, 16, 8, 0.10), rgba(10, 16, 8, 0.10)),
+      url('/images/login-bg.jpg') center top / max(100%, calc(100lvh * 804 / 1538)) auto no-repeat;
+  }
   /* The greeting and form are placed on the painting, not on the bottom of the
      screen: "boas-vindas" on the cottage's walls, the key field below it, on
      every phone height. Anything lower simply scrolls. */
-  #login:not(.hidden) .cover { padding-top: calc(100lvh * .57); }
+  #login:not(.hidden) .cover { padding-top: calc(var(--above) + 100lvh * .57); }
   #login:not(.hidden) .cover > .greeting { margin-top: 0; }
 }
 
