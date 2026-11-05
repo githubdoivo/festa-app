@@ -190,7 +190,7 @@ scanner will keep flagging the domain as unconfigured however correct the file
 in here is. Edit it via the zone's `security-center/securitytxt` API, or under
 Security -> Settings in the dashboard.
 
-It names `mail@ivolopes.com` (it used to be `security@appdoivo.com`, retired
+It names `mail@appdoivo.com` (one address per domain, all routed to the same Gmail; it used to be `security@appdoivo.com`, retired
 with the app), which is a Cloudflare Email Routing address, not a real
 mailbox. Two things about that:
 
