@@ -134,3 +134,26 @@ test('the demo domain and unlisted hosts (health checks) are served directly, no
     assert.notEqual(res.statusCode, 301, host);
   }
 });
+
+// The keys sat inside the hidden strip above the screen once the login gained the
+// painting behind the clock (#15), so phones could not see or tap them. Real browser,
+// iPhone and desktop sizes: both keys must be fully on screen and one tap logs in.
+test('the shared keys are on screen and one tap logs in, on a phone and a desktop', async () => {
+  const { webkit, devices } = await import('playwright');
+  const browser = await webkit.launch();
+  try {
+    for (const device of [devices['iPhone 13'], devices['iPhone SE'], { viewport: { width: 1280, height: 800 } }]) {
+      const page = await browser.newPage(device);
+      await page.goto(base.replace(/\/api$/, '/'), { waitUntil: 'networkidle' });
+      const keys = page.locator('#demo-keys-list button');
+      assert.equal(await keys.count(), 2);
+      for (const k of await keys.all()) {
+        const onScreen = await k.evaluate((e) => { const r = e.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight && r.height > 0; });
+        assert.ok(onScreen, `${JSON.stringify(device.viewport)}: demo key off screen`);
+      }
+      await keys.first().click({ timeout: 5000 });
+      await page.locator('#app:not(.hidden)').waitFor({ timeout: 5000 });
+      await page.close();
+    }
+  } finally { await browser.close(); }
+});

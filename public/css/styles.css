@@ -813,7 +813,8 @@ body:has(#login:not(.hidden)) .version-badge { bottom: calc(-1 * var(--above)); 
 @media (min-height: 540px) {
   #login .cover > .demo-keys {
     position: absolute;
-    top: calc(14px + env(safe-area-inset-top));
+    /* below the hidden strip above the screen (--above, see #login below) */
+    top: calc(var(--above, 0px) + 14px + env(safe-area-inset-top));
     left: 20px;
     right: 20px;
     width: auto;
