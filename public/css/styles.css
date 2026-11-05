@@ -539,29 +539,21 @@ body:has(#login:not(.hidden)) { background-color: #241d17; }
   }
 }
 
-/* Wide screens (a desktop or laptop window). The painting is about 1:2, so
-   `cover` on a 16:10 window scales it to the full width and shows only a
-   blurred, magnified band of grass - the cottage is off-screen and the form
-   floats over nothing. Here the whole painting is shown at full height in
-   the middle, its sides fading into the same deep green the grass is painted
-   in, so the screen reads as one picture rather than a zoomed crop. Phones,
-   tablets and phones on their side keep the rules above. */
+/* Wide screens (a desktop or laptop window). The tall painting cannot fill a
+   16:10 window, so wide screens get their own painting: the same cottage by the
+   same hand, widened to landscape with the meadow carrying on to both sides
+   (login-bg-wide.jpg, 1536x1024, made from login-bg.jpg on 2026-11-05). It
+   fills the whole screen with `cover`, the cottage held a little above the
+   middle so the form below sits on calm grass. Phones, tablets and phones on
+   their side keep the tall painting above. */
 @media (min-aspect-ratio: 4/5) and (min-width: 760px) and (min-height: 521px) {
-  #login {
-    background-color: #10230f;
-    /* The same darkening toward the bottom as the painting's own overlay, so
-       the sides and the middle meet without a seam. */
+  #login { background-color: #10230f; }
+  #login::before {
     background-image:
       linear-gradient(180deg, rgba(10, 16, 8, 0.10) 0%, rgba(10, 14, 8, 0.04) 34%, rgba(8, 12, 6, 0.80) 80%),
-      radial-gradient(ellipse 60% 85% at 50% 40%, #1d4520 0%, #143217 50%, #0c1b0c 100%);
-  }
-  #login::before {
-    /* The dark gradient still fills the screen behind the form; the painting
-       is fitted to the height and centred. */
-    background-size: 100% 100%, auto 100%;
-    background-position: center, center bottom;
-    -webkit-mask-image: linear-gradient(90deg, transparent calc(50% - 25.5vh), #000 calc(50% - 10vh), #000 calc(50% + 10vh), transparent calc(50% + 25.5vh));
-    mask-image: linear-gradient(90deg, transparent calc(50% - 25.5vh), #000 calc(50% - 10vh), #000 calc(50% + 10vh), transparent calc(50% + 25.5vh));
+      url('/images/login-bg-wide.jpg');
+    background-size: cover;
+    background-position: center 38%;
   }
   body:has(#login:not(.hidden)) { background-color: #0b180b; }
 }
