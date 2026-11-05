@@ -540,12 +540,12 @@ body:has(#login:not(.hidden)) { background-color: #241d17; }
 }
 
 /* Wide screens (a desktop or laptop window). The tall painting cannot fill a
-   16:10 window, so wide screens get their own painting: the same cottage by the
-   same hand, widened to landscape with the meadow carrying on to both sides
-   (login-bg-wide.jpg, 1536x1024, made from login-bg.jpg on 2026-11-05). It
-   fills the whole screen with `cover`, the cottage held a little above the
-   middle so the form below sits on calm grass. Phones, tablets and phones on
-   their side keep the tall painting above. */
+   16:10 window, so wide screens get login-bg-wide.jpg: the ORIGINAL painting,
+   pixel for pixel and unchanged, in the middle of a 3:2 canvas, with only the
+   meadow to its left and right added (AI fill, colour-matched and blended from
+   a mirror of the painting's own edges, so the join cannot be seen). The
+   designer's painting is never redrawn. It fills the screen with `cover`.
+   Phones, tablets and phones on their side keep the tall painting above. */
 @media (min-aspect-ratio: 4/5) and (min-width: 760px) and (min-height: 521px) {
   #login { background-color: #10230f; }
   #login::before {
@@ -553,7 +553,7 @@ body:has(#login:not(.hidden)) { background-color: #241d17; }
       linear-gradient(180deg, rgba(10, 16, 8, 0.10) 0%, rgba(10, 14, 8, 0.04) 34%, rgba(8, 12, 6, 0.80) 80%),
       url('/images/login-bg-wide.jpg');
     background-size: cover;
-    background-position: center 38%;
+    background-position: center center;
   }
   body:has(#login:not(.hidden)) { background-color: #0b180b; }
 }
