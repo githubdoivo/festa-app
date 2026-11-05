@@ -3122,6 +3122,7 @@ test('a photo with a red left and a blue right comes out of Memo the same way ro
   // an EXIF flag or a rewritten file would all show up here identically -
   // as the wrong colour on the wrong side.
   const shooter = await api('POST', '/admin/users', { token: ADMIN, body: { name: 'Left Right Tester' } });
+  withFullMemoDay(() => {}); // a pinned afternoon: the hour of the run must not decide whether moments exist
   const todayRes = await api('GET', '/memo/today', { token: shooter.token });
   const slot = todayRes.slots.find((sl) => sl.status === 'waiting') ?? todayRes.slots[0];
   markMemoSlotNotified(slot.id);
@@ -3216,6 +3217,7 @@ test('tapping mirror actually flips the photo on screen, and it survives a reloa
   // look at their own face and decide, which is worthless if the change
   // waits for the next poll or for a round trip to finish.
   const shooter = await api('POST', '/admin/users', { token: ADMIN, body: { name: 'Mirror Tapper' } });
+  withFullMemoDay(() => {}); // a pinned afternoon: the hour of the run must not decide whether moments exist
   const todayRes = await api('GET', '/memo/today', { token: shooter.token });
   const slot = todayRes.slots.find((sl) => sl.status === 'waiting') ?? todayRes.slots[0];
   markMemoSlotNotified(slot.id);
