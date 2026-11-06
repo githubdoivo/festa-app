@@ -3407,3 +3407,5 @@ html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.th
 html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .tab { color: rgba(243, 234, 214, 0.78); text-shadow: 0 1px 8px rgba(4, 8, 3, 0.6); }
 html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .tab.active { color: #fffbea; }
 html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .brand-name { color: #f3ead6; text-shadow: 0 1px 10px rgba(4, 8, 3, 0.6); }
+html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .topbar-actions,
+html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .topbar-actions .icon-btn { color: #f3ead6; filter: drop-shadow(0 1px 6px rgba(4, 8, 3, 0.6)); }
