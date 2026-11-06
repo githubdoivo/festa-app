@@ -3371,3 +3371,14 @@ h1.brand-name { margin: 0; font-size: inherit; font-weight: inherit; }
    so the three-column grid holds three squares rather than three labels
    that wrapped onto two lines each on a narrow phone. */
 .voting-controls button.icon-action { width: 100%; }
+
+/* Demo keys right under the key field (Ivo, 6 Nov): small, side by side, part of the form's column */
+#login .cover > .demo-keys, #login .demo-keys { position: static !important; width: 100%; max-width: 320px; margin: 12px auto 0; }
+.demo-keys-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.demo-keys-help { font-size: 0.82rem; margin: 0 0 6px; }
+@media (pointer: coarse) and (orientation: portrait) and (max-width: 600px) {
+  #login:not(.hidden):has(#demo-keys:not(.hidden)) .cover { padding-top: calc(var(--above) + 100lvh * .40); }
+}
+@media (max-height: 700px) {
+  #login:not(.hidden):has(#demo-keys:not(.hidden)) .cover { padding-top: calc(var(--above) + 100lvh * .30); }
+}
