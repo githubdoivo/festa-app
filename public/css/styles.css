@@ -3374,38 +3374,5 @@ h1.brand-name { margin: 0; font-size: inherit; font-weight: inherit; }
 
 /* ==================== lodge (2026-11-06) ====================
    The brand reads "lodge" in the same serif as lodge.appdoivo.com and the
-   login, lowercase, not the old cursive "appdoivo".
-   The Wall tab (theme-mural) belongs to the same painted world as the login
-   and the landing page: the green cottage painting across the top, its own
-   deep green continuing below it (no fade). Light mode: cream cards with
-   deep green ink; dark mode: dark green cards with cream ink, like the key
-   boxes on the login. Text sitting on the painting itself is cream in both. */
+   login, lowercase, not the old cursive "appdoivo". The Wall keeps its brick. */
 .brand .brand-name { font-family: var(--serif); font-weight: 500; font-style: normal; font-size: clamp(2rem, 8.4vw, 2.6rem); line-height: 1; letter-spacing: 0.01em; -webkit-text-stroke: 0; text-transform: lowercase; }
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) {
-  --paper: #ece3cd; --paper-2: #f2ead7; --paper-3: #f6f0e1;
-  --ink: #1f2f1c; --ink-soft: #3d4f37;
-  --line: #8a9a72; --line-2: #b7c29c;
-  --clay: #2f5a2b; --clay-2: #24461f; --clay-active: #183615; --rata: #2f5a2b;
-  --brand: #f3ead6; --on-cta: #f3ead6;
-  background-color: #2f522c;
-  background-image: url('/images/login-bg.jpg');
-  background-repeat: no-repeat;
-  background-position: center top;
-  background-size: max(100%, 520px) auto;
-}
-html.mode-dark body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) {
-  --paper: #21301f; --paper-2: #283a25; --paper-3: #30452c;
-  --ink: #efe6d2; --ink-soft: #d3cab1;
-  --line: #56724c; --line-2: #3f5739;
-  --clay: #c9d98a; --clay-2: #e3ecb5; --clay-active: #f4f6d6; --rata: #c9d98a;
-  --on-cta: #1c2a1a;
-}
-@media (min-aspect-ratio: 4/5) { html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) { background-image: url('/images/login-bg-wide.jpg'); background-size: max(100%, 1200px) auto; } }
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .card { background: color-mix(in srgb, var(--paper) 94%, transparent); border-color: var(--line); box-shadow: 0 14px 36px rgba(6, 12, 5, 0.45); }
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .hero-line { color: #f3ead6; text-shadow: 0 1px 10px rgba(4, 8, 3, 0.6); }
-/* the tabs and the brand sit on the painting: light ink in both modes, the chosen tab brightest */
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .tab { color: rgba(243, 234, 214, 0.78); text-shadow: 0 1px 8px rgba(4, 8, 3, 0.6); }
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .tab.active { color: #fffbea; }
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .brand-name { color: #f3ead6; text-shadow: 0 1px 10px rgba(4, 8, 3, 0.6); }
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .topbar-actions,
-html body.theme-mural.theme-mural:not(.theme-rata):not(.theme-furnished):not(.theme-swamp):not(.theme-plaza):not(.theme-memo) .topbar-actions .icon-btn { color: #f3ead6; filter: drop-shadow(0 1px 6px rgba(4, 8, 3, 0.6)); }
