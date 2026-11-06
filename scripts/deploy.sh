@@ -55,9 +55,9 @@ echo "Running tests before deploy..."
 npm test
 
 if [[ "$target" == "qa" ]]; then
-  fly deploy -a appdoivo-qa --config fly.qa.toml
+  fly deploy -a lodge-qa --config fly.qa.toml
 elif [[ "$target" == "demo" ]]; then
-  fly deploy -a appdoivo-demo --config fly.demo.toml
+  fly deploy -a lodge-demo --config fly.demo.toml
 else
   fly deploy -a appdoivo
 fi

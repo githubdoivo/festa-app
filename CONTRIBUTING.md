@@ -13,7 +13,7 @@ Never commit straight to `main`.
 
 ## Environments
 
-- **QA** (`appdoivo-qa`, https://lodge-qa.appdoivo.com) - manual preview target.
+- **QA** (`lodge-qa`, https://lodge-qa.appdoivo.com) - manual preview target.
   Stops when idle (`min_machines_running = 0`), so it costs next to nothing
   between tests. The first visit after a pause takes a few seconds, and
   the database starts fresh (seeded) each time it wakes, like after a deploy.
@@ -23,7 +23,7 @@ Never commit straight to `main`.
   automatically. Use throwaway test users here, not real ones.
 - **Production** (`appdoivo`, https://lodge.appdoivo.com) - the real app, real data,
   persistent volume. Only ever deployed from `main`. Suspended between parties.
-- **Demo** (`appdoivo-demo`, https://lodge-demo.appdoivo.com) - public, for
+- **Demo** (`lodge-demo`, https://lodge-demo.appdoivo.com) - public, for
   anyone to try (the README links it). Mock data only, `DEMO_MODE=true` (see
   `src/demo.js`), no volume, stops when idle. Deployed from `main` with
   `scripts/deploy.sh demo`, using `FLY_API_TOKEN_DEMO` from `.env`.
@@ -57,7 +57,7 @@ session's work and deploy once at the end.
    without an open PR don't trigger CI, to avoid noise on WIP commits that
    aren't close to main yet.
 5. Deploy the branch straight to QA with `scripts/deploy.sh qa` (wraps
-   `npm test` + `fly deploy -a appdoivo-qa --config fly.qa.toml` - refuses
+   `npm test` + `fly deploy -a lodge-qa --config fly.qa.toml` - refuses
    to deploy if tests fail) so it can be checked live at
    https://lodge-qa.appdoivo.com before it's even merged. Bump the version in
    `package.json` before each QA deploy, so the version badge makes it
@@ -74,7 +74,7 @@ session's work and deploy once at the end.
 ### The app is closed (23 September 2026)
 
 **Both apps are scaled to zero machines** - `fly scale count 0` on
-`appdoivo` and `appdoivo-qa`. The party is over and nothing needs to be
+`appdoivo` and `lodge-qa`. The party is over and nothing needs to be
 running; neither domain answers, and nothing can wake them, which is the
 difference between this and stopping a machine (`auto_start_machines` is
 on, so any stray request would have restarted a stopped one and started

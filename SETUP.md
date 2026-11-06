@@ -95,7 +95,7 @@ The only requirement is a **persistent disk** for the SQLite database. If the ho
 
 `min_machines_running` is set to 1 in `fly.toml` so the Rata reveal (every 3 hours) fires even with no traffic. Outside events you may set it to 0 to save resources (the cron then only runs when there is a visit).
 
-QA (`appdoivo-qa`) is deployed the same way but with `scripts/deploy.sh qa` (or `fly deploy -a appdoivo-qa --config fly.qa.toml`) - see [CONTRIBUTING.md](CONTRIBUTING.md) for the full branch -> QA -> prod process.
+QA (`lodge-qa`) is deployed the same way but with `scripts/deploy.sh qa` (or `fly deploy -a lodge-qa --config fly.qa.toml`) - see [CONTRIBUTING.md](CONTRIBUTING.md) for the full branch -> QA -> prod process.
 
 ## Free hosting recommendations (app + database), securely
 

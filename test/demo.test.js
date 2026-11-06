@@ -16,7 +16,7 @@ process.env.DEMO_MODE = 'true';
 process.env.ANTHROPIC_API_KEY = '';
 process.env.ENABLE_PLAZA = 'true';
 process.env.CANONICAL_HOST = 'lodge-demo.appdoivo.com';
-process.env.REDIRECT_HOSTS = 'appdoivo-demo.fly.dev,festa-demo.appdoivo.com';
+process.env.REDIRECT_HOSTS = 'lodge-demo.fly.dev';
 
 const { default: app } = await import('../src/app.js');
 const { seedDemo } = await import('../src/seedDemo.js');
@@ -120,8 +120,8 @@ function getAs(host, path) {
   });
 }
 
-test('the old addresses (fly.dev, and festa-demo from before the Lodge rename) forward to lodge-demo.appdoivo.com', async () => {
-  for (const host of ['appdoivo-demo.fly.dev', 'festa-demo.appdoivo.com']) {
+test('the bare fly.dev address forwards to lodge-demo.appdoivo.com', async () => {
+  for (const host of ['lodge-demo.fly.dev']) {
     const res = await getAs(host, '/plaza?x=1');
     assert.equal(res.statusCode, 301, host);
     assert.equal(res.headers.location, 'https://lodge-demo.appdoivo.com/plaza?x=1', host);

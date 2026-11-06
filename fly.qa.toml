@@ -4,9 +4,9 @@
 # ephemeral on purpose (resets on every deploy/restart), and the machine
 # scales to zero when idle, so this costs close to nothing to keep around.
 #
-# Deploy with:  fly deploy -a appdoivo-qa --config fly.qa.toml
+# Deploy with:  fly deploy -a lodge-qa --config fly.qa.toml
 
-app = "appdoivo-qa"
+app = "lodge-qa"
 primary_region = "cdg"
 
 [build]
@@ -46,7 +46,7 @@ primary_region = "cdg"
   # volume needed for QA testing.
   ENABLE_MEMO = "true"
   CANONICAL_HOST = "lodge-qa.appdoivo.com"
-  REDIRECT_HOSTS = "appdoivo-qa.fly.dev,festa-qa.appdoivo.com"
+  REDIRECT_HOSTS = "lodge-qa.fly.dev"
 
 [http_service]
   internal_port = 3000

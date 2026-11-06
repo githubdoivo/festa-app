@@ -1,6 +1,6 @@
 {
   "name": "lodge-app",
-  "version": "1.9.12",
+  "version": "1.9.13",
   "description": "Party web app with four features: wall, rata, snatch and plaza.",
   "type": "module",
   "main": "src/server.js",
