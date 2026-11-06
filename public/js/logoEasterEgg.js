@@ -1,5 +1,5 @@
-// Easter egg: triple-click the "appdoivo" logo (any page) to swap it for
-// "appde<firstname>", e.g. "appdediogo" for Fábio Nunes. Click three more
+// Easter egg: triple-click the "lodge" logo (any page) to swap it for
+// "lodge de <firstname>", e.g. "lodge de diogo". Click three more
 // times to revert. Shared between app.js and settings.js since both have
 // their own .brand-name logo.
 //
@@ -20,7 +20,7 @@ export function wireLogoEasterEgg(name, initialCustomized = false) {
 
   let isCustomized = initialCustomized;
   if (isCustomized) {
-    logo.textContent = `appde${slug}`;
+    logo.textContent = `lodge de ${slug}`;
   }
 
   let clicks = 0;
@@ -32,7 +32,7 @@ export function wireLogoEasterEgg(name, initialCustomized = false) {
     if (clicks === 3) {
       clicks = 0;
       isCustomized = !isCustomized;
-      logo.textContent = isCustomized ? `appde${slug}` : 'appdoivo';
+      logo.textContent = isCustomized ? `lodge de ${slug}` : 'lodge';
       try {
         await fetch('/api/me/logo-customized', {
           method: 'POST',

@@ -72,7 +72,7 @@ import {
 import { listMessages, postMessage, resetPseudonym, wallPseudonymDirectory } from './chat.js';
 import { seedDemo, seedGuestList, seedDemoConsequences, seedDemoContestants, seedDemoWall, seedDemoChat, seedDemoMemo } from './seedDemo.js';
 import { searchUnclaimedUsers, claimKey } from './keyClaim.js';
-import { demoGuard, demoKeys } from './demo.js';
+import { demoGuard, demoKeys, DEMO_MODE, demoMemoFile } from './demo.js';
 import { myDedication, saveDedication, allDedications, wipeAll as wipeAllDedications } from './dedications.js';
 import { renderDedications, newDedicationsDocument } from './dedicationsPdf.js';
 import { queueAndRun, backfill as backfillTranslations } from './translate.js';
@@ -696,6 +696,9 @@ router.post('/memo/slots/:id/upload', (req, res) => {
       return res.status(400).json({ error: code });
     }
     if (!req.file) return res.status(400).json({ error: 'err_memo_invalid_type' });
+    // Public demo: the visitor's real photo never stays on the server (they see
+    // it from their own browser); the server keeps the demo placeholder instead.
+    if (DEMO_MODE) demoMemoFile(req.file);
     try {
       const upload = recordUpload(Number(req.params.id), req.user.id, {
         mimeType: req.file.mimetype,
@@ -895,7 +898,7 @@ router.patch('/admin/users/:id/admin', (req, res) => {
   // after the response so a push failure cannot fail the role change, which
   // is the part that matters.
   notifyUser(id, {
-    title: { pt: 'appdoivo', en: 'appdoivo' },
+    title: { pt: 'lodge', en: 'lodge' },
     body: isAdmin
       ? { pt: 'agora és admin e tens acesso ao painel de administração.',
           en: 'you are an admin now and have access to the admin panel.' }
