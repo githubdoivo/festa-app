@@ -614,7 +614,11 @@ function memoCaptureAttr() {
   return hasCamera ? ' capture="environment"' : '';
 }
 
+// Your own uploads from this visit are shown from this device (instant, and in
+// the public demo the server only holds a placeholder for them).
+const memoLocal = new Map();
 function memoUploadUrl(uploadId) {
+  if (memoLocal.has(Number(uploadId))) return memoLocal.get(Number(uploadId));
   return `/api/memo/uploads/${uploadId}?token=${encodeURIComponent(getToken())}`;
 }
 
@@ -800,6 +804,8 @@ $('memo-dots').addEventListener('change', async (e) => {
       const data = await res.json().catch(() => ({}));
       throw new Error(data.error ? t(data.error) : `Error ${res.status}`);
     }
+    const made = await res.json().catch(() => ({}));
+    if (made.id && file.type.startsWith('image/')) memoLocal.set(Number(made.id), URL.createObjectURL(file));
   } catch (err) {
     await showAlert(err.message);
   } finally {

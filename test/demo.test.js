@@ -157,3 +157,17 @@ test('the shared keys are on screen and one tap logs in, on a phone and a deskto
     }
   } finally { await browser.close(); }
 });
+
+test('a memo photo sent to the public demo is kept on the server only as the placeholder', async () => {
+  const { demoMemoFile } = await import('../src/demo.js');
+  const { writeFileSync, readFileSync } = await import('node:fs');
+  const path = join(tmpdir(), `memo-demo-${process.pid}.jpg`);
+  writeFileSync(path, Buffer.from('a visitor\'s real photo'));
+  const file = { path, mimetype: 'video/mp4', size: 22 };
+  demoMemoFile(file);
+  const placeholder = readFileSync(new URL('../public/images/demo-photo.jpg', import.meta.url));
+  assert.deepEqual(readFileSync(path), placeholder);
+  assert.equal(file.mimetype, 'image/jpeg');
+  assert.equal(file.size, placeholder.length);
+  rmSync(path, { force: true });
+});

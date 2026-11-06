@@ -8,10 +8,12 @@
 // - Anything that publishes something a stranger could abuse (photos, links,
 //   the anonymous chat) or that wipes the demo for everyone is refused.
 //   Photos are swapped for a placeholder instead of refused, so registering
-//   an outfit still works end to end.
+//   an outfit still works end to end. Memo works the same way: the server
+//   keeps the placeholder, and the visitor sees their own photo from their
+//   own browser for as long as the page is open.
 // The database has no volume in the demo, so every restart - the machine
 // stops when idle - brings back the seeded data.
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generateDemoUserToken } from './db.js';
@@ -22,6 +24,14 @@ export const DEMO_MODE = process.env.DEMO_MODE === 'true';
 const PLACEHOLDER_PHOTO = DEMO_MODE
   ? `data:image/jpeg;base64,${readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'images', 'demo-photo.jpg')).toString('base64')}`
   : null;
+
+/** Demo only: replace an uploaded memo file on disk with the placeholder photo. */
+export function demoMemoFile(file) {
+  if (!DEMO_MODE || !file?.path) return;
+  writeFileSync(file.path, Buffer.from(PLACEHOLDER_PHOTO.split(',')[1], 'base64'));
+  file.mimetype = 'image/jpeg';
+  file.size = statSync(file.path).size;
+}
 
 /** The shared logins the demo's login screen shows. */
 export function demoKeys() {
