@@ -56,7 +56,7 @@ self.addEventListener('push', (event) => {
     data = { title: 'Notificacao', body: event.data ? event.data.text() : '' };
   }
 
-  const title = data.title || 'lodge';
+  const title = data.title || 'lodgedoivo';
   const options = {
     body: data.body || '',
     tag: data.tag || 'app',
