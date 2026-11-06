@@ -1,4 +1,4 @@
-# Public demo (https://festa-demo.appdoivo.com): the app with mock data for
+# Public demo (https://lodge-demo.appdoivo.com): the app with mock data for
 # anyone to try, linked from the README. See src/demo.js for what demo mode
 # turns off and why.
 #
@@ -25,8 +25,8 @@ primary_region = "cdg"
   ENABLE_PLAZA = "true"
   ENABLE_MEMO = "false"
   ADMIN_NAME = "Host"
-  CANONICAL_HOST = "festa-demo.appdoivo.com"
-  REDIRECT_HOSTS = "appdoivo-demo.fly.dev"
+  CANONICAL_HOST = "lodge-demo.appdoivo.com"
+  REDIRECT_HOSTS = "appdoivo-demo.fly.dev,festa-demo.appdoivo.com"
 
 [http_service]
   internal_port = 3000
