@@ -898,7 +898,7 @@ router.patch('/admin/users/:id/admin', (req, res) => {
   // after the response so a push failure cannot fail the role change, which
   // is the part that matters.
   notifyUser(id, {
-    title: { pt: 'lodge', en: 'lodge' },
+    title: { pt: 'lodgedoivo', en: 'lodgedoivo' },
     body: isAdmin
       ? { pt: 'agora és admin e tens acesso ao painel de administração.',
           en: 'you are an admin now and have access to the admin panel.' }

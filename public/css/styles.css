@@ -3371,8 +3371,3 @@ h1.brand-name { margin: 0; font-size: inherit; font-weight: inherit; }
    so the three-column grid holds three squares rather than three labels
    that wrapped onto two lines each on a narrow phone. */
 .voting-controls button.icon-action { width: 100%; }
-
-/* ==================== lodge (2026-11-06) ====================
-   The brand reads "lodge" in the same serif as lodge.appdoivo.com and the
-   login, lowercase, not the old cursive "appdoivo". The Wall keeps its brick. */
-.brand .brand-name { font-family: var(--serif); font-weight: 500; font-style: normal; font-size: clamp(2rem, 8.4vw, 2.6rem); line-height: 1; letter-spacing: 0.01em; -webkit-text-stroke: 0; text-transform: lowercase; }
