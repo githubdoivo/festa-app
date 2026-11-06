@@ -3376,3 +3376,9 @@ h1.brand-name { margin: 0; font-size: inherit; font-weight: inherit; }
 #login .cover > .demo-keys, #login .demo-keys { position: static !important; width: 100%; max-width: 320px; margin: 12px auto 0; }
 .demo-keys-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .demo-keys-help { font-size: 0.82rem; margin: 0 0 6px; }
+@media (pointer: coarse) and (orientation: portrait) and (max-width: 600px) {
+  #login:not(.hidden):has(#demo-keys:not(.hidden)) .cover { padding-top: calc(var(--above) + 100lvh * .40); }
+}
+@media (max-height: 700px) {
+  #login:not(.hidden):has(#demo-keys:not(.hidden)) .cover { padding-top: calc(var(--above) + 100lvh * .30); }
+}
