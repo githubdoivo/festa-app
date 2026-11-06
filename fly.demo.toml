@@ -12,7 +12,7 @@
 #
 #   scripts/deploy.sh demo
 
-app = "appdoivo-demo"
+app = "lodge-demo"
 primary_region = "cdg"
 
 [build]
@@ -26,7 +26,7 @@ primary_region = "cdg"
   ENABLE_MEMO = "false"
   ADMIN_NAME = "Host"
   CANONICAL_HOST = "lodge-demo.appdoivo.com"
-  REDIRECT_HOSTS = "appdoivo-demo.fly.dev,festa-demo.appdoivo.com"
+  REDIRECT_HOSTS = "lodge-demo.fly.dev"
 
 [http_service]
   internal_port = 3000
