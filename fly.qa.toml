@@ -45,8 +45,8 @@ primary_region = "cdg"
   # reset on every deploy - exactly like QA's DB already does, no extra
   # volume needed for QA testing.
   ENABLE_MEMO = "true"
-  CANONICAL_HOST = "festa-qa.appdoivo.com"
-  REDIRECT_HOSTS = "appdoivo-qa.fly.dev"
+  CANONICAL_HOST = "lodge-qa.appdoivo.com"
+  REDIRECT_HOSTS = "appdoivo-qa.fly.dev,festa-qa.appdoivo.com"
 
 [http_service]
   internal_port = 3000

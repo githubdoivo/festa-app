@@ -13,7 +13,7 @@ Never commit straight to `main`.
 
 ## Environments
 
-- **QA** (`appdoivo-qa`, https://festa-qa.appdoivo.com) - manual preview target.
+- **QA** (`appdoivo-qa`, https://lodge-qa.appdoivo.com) - manual preview target.
   Stops when idle (`min_machines_running = 0`), so it costs next to nothing
   between tests. The first visit after a pause takes a few seconds, and
   the database starts fresh (seeded) each time it wakes, like after a deploy.
@@ -21,9 +21,9 @@ Never commit straight to `main`.
   Same admin login as production, but its own `TOKEN_SECRET`/VAPID keys.
   Deployed manually, on demand, from whatever branch is being tested - never
   automatically. Use throwaway test users here, not real ones.
-- **Production** (`appdoivo`, https://festa.appdoivo.com) - the real app, real data,
+- **Production** (`appdoivo`, https://lodge.appdoivo.com) - the real app, real data,
   persistent volume. Only ever deployed from `main`. Suspended between parties.
-- **Demo** (`appdoivo-demo`, https://festa-demo.appdoivo.com) - public, for
+- **Demo** (`appdoivo-demo`, https://lodge-demo.appdoivo.com) - public, for
   anyone to try (the README links it). Mock data only, `DEMO_MODE=true` (see
   `src/demo.js`), no volume, stops when idle. Deployed from `main` with
   `scripts/deploy.sh demo`, using `FLY_API_TOKEN_DEMO` from `.env`.
@@ -59,7 +59,7 @@ session's work and deploy once at the end.
 5. Deploy the branch straight to QA with `scripts/deploy.sh qa` (wraps
    `npm test` + `fly deploy -a appdoivo-qa --config fly.qa.toml` - refuses
    to deploy if tests fail) so it can be checked live at
-   https://festa-qa.appdoivo.com before it's even merged. Bump the version in
+   https://lodge-qa.appdoivo.com before it's even merged. Bump the version in
    `package.json` before each QA deploy, so the version badge makes it
    obvious which build is live.
 6. Once it's confirmed working on QA, open a PR and merge it into `main`

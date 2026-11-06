@@ -31,8 +31,8 @@ app.set('trust proxy', 1);
 
 // One address per app: other hosts listed in REDIRECT_HOSTS forward to
 // CANONICAL_HOST, path and query kept. Only the bare fly.dev address is
-// redirected. One domain per app, served directly: festa.appdoivo.com is the
-// real app, festa-demo.appdoivo.com the demo. Only the listed hosts are redirected - Fly's health
+// redirected. One domain per app, served directly: lodge.appdoivo.com is the
+// real app, lodge-demo.appdoivo.com the demo. Only the listed hosts are redirected - Fly's health
 // checks (internal IP) and anything else are left alone.
 const CANONICAL_HOST = process.env.CANONICAL_HOST;
 const REDIRECT_HOSTS = new Set((process.env.REDIRECT_HOSTS || '').split(',').map((h) => h.trim().toLowerCase()).filter(Boolean));
